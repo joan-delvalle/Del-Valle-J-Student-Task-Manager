@@ -1,0 +1,330 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+
+    min-height: 100vh;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffe1ec,
+            #f9c5d5,
+            #fce4ec
+        );
+
+    color: #4a3040;
+}
+
+
+/* NAVBAR */
+
+.navbar {
+    background: #d85a8a;
+
+    color: white;
+
+    padding: 20px 40px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    box-shadow:
+        0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.logo {
+    font-size: 22px;
+
+    font-weight: bold;
+}
+
+.nav-links {
+    display: flex;
+
+    gap: 25px;
+}
+
+.nav-links a {
+    color: white;
+
+    text-decoration: none;
+
+    font-weight: bold;
+
+    transition: 0.2s;
+}
+
+.nav-links a:hover {
+    opacity: 0.8;
+}
+
+
+/* GENERAL PAGE */
+
+.page {
+    width: 90%;
+
+    max-width: 1000px;
+
+    margin: 40px auto;
+
+    padding: 40px;
+
+    background: rgba(255, 255, 255, 0.95);
+
+    border-radius: 25px;
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+
+/* HOME */
+
+.home-page {
+    text-align: center;
+
+    padding: 80px 30px;
+}
+
+.welcome-icon {
+    font-size: 80px;
+
+    margin-bottom: 20px;
+}
+
+.home-page h1 {
+    color: #c13d70;
+
+    font-size: 38px;
+
+    margin-bottom: 15px;
+}
+
+.home-page p {
+    font-size: 18px;
+
+    margin-bottom: 30px;
+}
+
+.home-button {
+    display: inline-block;
+
+    padding: 14px 25px;
+
+    background: #d85a8a;
+
+    color: white;
+
+    text-decoration: none;
+
+    border-radius: 12px;
+
+    font-weight: bold;
+}
+
+.home-button:hover {
+    background: #b94470;
+}
+
+
+/* DASHBOARD */
+
+.dashboard h1 {
+    color: #c13d70;
+
+    margin-bottom: 25px;
+}
+
+
+/* FORM */
+
+.task-form {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+
+    margin-bottom: 30px;
+}
+
+.task-form input,
+.task-form textarea {
+    width: 100%;
+
+    padding: 14px;
+
+    border: 2px solid #f1b4ca;
+
+    border-radius: 12px;
+
+    font-size: 16px;
+
+    outline: none;
+}
+
+.task-form input:focus,
+.task-form textarea:focus {
+    border-color: #d85a8a;
+}
+
+.task-form textarea {
+    min-height: 100px;
+
+    resize: vertical;
+}
+
+
+/* BUTTON */
+
+button {
+    border: none;
+
+    border-radius: 10px;
+
+    padding: 12px 18px;
+
+    background: #d85a8a;
+
+    color: white;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+    font-size: 15px;
+}
+
+button:hover {
+    background: #b94470;
+}
+
+
+/* TASK LIST */
+
+.task-list {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 15px;
+}
+
+
+/* TASK CARD */
+
+.task-card {
+    padding: 20px;
+
+    background: #fff5f8;
+
+    border: 1px solid #f1c1d2;
+
+    border-radius: 15px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 20px;
+}
+
+.task-info h3 {
+    color: #c13d70;
+
+    margin-bottom: 8px;
+}
+
+.task-info p {
+    margin-bottom: 10px;
+}
+
+.completed {
+    color: #238636;
+
+    font-weight: bold;
+}
+
+.pending {
+    color: #d47700;
+
+    font-weight: bold;
+}
+
+.task-buttons {
+    display: flex;
+
+    gap: 8px;
+}
+
+.delete-button {
+    background: #b94470;
+}
+
+.empty {
+    text-align: center;
+
+    padding: 30px;
+
+    color: #777;
+}
+
+
+/* ABOUT */
+
+.about-page h1 {
+    color: #c13d70;
+
+    margin-bottom: 20px;
+}
+
+.about-page h2 {
+    margin-top: 25px;
+
+    margin-bottom: 10px;
+}
+
+.about-page ul {
+    padding-left: 25px;
+
+    line-height: 1.8;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+    .navbar {
+        flex-direction: column;
+
+        gap: 15px;
+
+        text-align: center;
+    }
+
+    .nav-links {
+        gap: 15px;
+    }
+
+    .task-card {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+    .home-page h1 {
+        font-size: 28px;
+    }
+}
