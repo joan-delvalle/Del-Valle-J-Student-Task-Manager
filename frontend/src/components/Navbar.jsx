@@ -1,31 +1,71 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 function Navbar() {
+
     return (
-        <nav className="navbar">
+        <aside className="sidebar">
 
-            <div className="logo">
-                📚 Student Task Manager
+            <div className="sidebar-brand">
+                <div className="brand-icon">
+                    🎓
+                </div>
+
+                <div>
+                    <h2>Student</h2>
+                    <span>Task Manager</span>
+                </div>
             </div>
 
-            <div className="nav-links">
+            <nav className="sidebar-nav">
 
-                <Link to="/">
+                <NavLink
+                    to="/"
+                    className={({ isActive }) =>
+                        isActive ? "nav-item active" : "nav-item"
+                    }
+                >
+                    <span>🏠</span>
                     Home
-                </Link>
+                </NavLink>
 
-                <Link to="/dashboard">
-                    Dashboard
-                </Link>
+                <NavLink
+                    to="/dashboard"
+                    className={({ isActive }) =>
+                        isActive ? "nav-item active" : "nav-item"
+                    }
+                >
+                    <span>📋</span>
+                    My Tasks
+                </NavLink>
 
-                <Link to="/about">
+                <NavLink
+                    to="/about"
+                    className={({ isActive }) =>
+                        isActive ? "nav-item active" : "nav-item"
+                    }
+                >
+                    <span>ℹ️</span>
                     About
-                </Link>
+                </NavLink>
+
+            </nav>
+
+            <div className="sidebar-footer">
+
+                <div className="student-avatar">
+                    JD
+                </div>
+
+                <div>
+                    <strong>Joan Del Valle</strong>
+                    <small>Student</small>
+                </div>
 
             </div>
 
-        </nav>
+        </aside>
     );
 }
 
 export default Navbar;
+

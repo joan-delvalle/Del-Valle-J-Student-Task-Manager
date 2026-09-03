@@ -10,32 +10,38 @@ import Dashboard from "./pages/Dashboard";
 import About from "./pages/About";
 
 function App() {
+
     return (
         <BrowserRouter>
 
-            <Navbar />
+            <div className="app-layout">
 
-            <Routes>
+                <Navbar />
 
-                <Route
-                    path="/"
-                    element={<Home />}
-                />
+                <Routes>
 
-                <Route
-                    path="/dashboard"
-                    element={<Dashboard />}
-                />
+                    <Route
+                        path="/"
+                        element={<Home />}
+                    />
 
-                <Route
-                    path="/about"
-                    element={<About />}
-                />
+                    <Route
+                        path="/dashboard"
+                        element={<Dashboard />}
+                    />
 
-            </Routes>
+                    <Route
+                        path="/about"
+                        element={<About />}
+                    />
+
+                </Routes>
+
+            </div>
 
         </BrowserRouter>
     );
 }
 
 export default App;
+

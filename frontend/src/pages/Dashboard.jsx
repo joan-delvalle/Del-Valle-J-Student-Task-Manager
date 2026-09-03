@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+
+import { useMemo, useState } from "react";
 import TaskCard from "../components/TaskCard";
 
 function Dashboard() {
@@ -6,12 +7,14 @@ function Dashboard() {
     const [tasks, setTasks] = useState([]);
 
     const [title, setTitle] = useState("");
-
     const [description, setDescription] = useState("");
+    const [deadline, setDeadline] = useState("");
 
-    // ==========================
-    // GET TASKS
-    // ==========================
+    const [search, setSearch] = useState("");
+    const [filter, setFilter] = useState("all");
+
+    const [loading, setLoading] = useState(true);
+
 
     const fetchTasks = async () => {
 
@@ -35,25 +38,13 @@ function Dashboard() {
                 "Error fetching tasks:",
                 error
             );
+
+        } finally {
+
+            setLoading(false);
         }
     };
 
-
-    // ==========================
-    // RUN WHEN PAGE LOADS
-    // ==========================
-
-    useEffect(() => {
-
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        fetchTasks();
-
-    }, []);
-
-
-    // ==========================
-    // ADD TASK
-    // ==========================
 
     const addTask = async (event) => {
 
@@ -78,8 +69,9 @@ function Dashboard() {
                     },
 
                     body: JSON.stringify({
-                        title: title,
-                        description: description
+                        title,
+                        description,
+                        deadline: deadline || null
                     })
                 }
             );
@@ -89,8 +81,8 @@ function Dashboard() {
             }
 
             setTitle("");
-
             setDescription("");
+            setDeadline("");
 
             fetchTasks();
 
@@ -100,13 +92,10 @@ function Dashboard() {
                 "Error adding task:",
                 error
             );
+
+            alert("Unable to add task.");
         }
     };
-
-
-    // ==========================
-    // COMPLETE / PENDING
-    // ==========================
 
     const toggleTask = async (task) => {
 
@@ -143,10 +132,6 @@ function Dashboard() {
     };
 
 
-    // ==========================
-    // DELETE TASK
-    // ==========================
-
     const deleteTask = async (id) => {
 
         const confirmDelete = window.confirm(
@@ -182,72 +167,392 @@ function Dashboard() {
     };
 
 
-    // ==========================
-    // DISPLAY
-    // ==========================
+    const totalTasks = tasks.length;
+
+    const completedTasks = tasks.filter(
+        task => task.completed
+    ).length;
+
+    const pendingTasks = tasks.filter(
+        task => !task.completed
+    ).length;
+
+    const dueSoonTasks = tasks.filter(task => {
+
+        if (task.completed || !task.deadline) {
+            return false;
+        }
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const deadlineDate = new Date(
+            `${task.deadline}T00:00:00`
+        );
+
+        const threeDays = new Date(
+            today.getTime() +
+            3 * 24 * 60 * 60 * 1000
+        );
+
+        return (
+            deadlineDate >= today &&
+            deadlineDate <= threeDays
+        );
+
+    }).length;
+
+    const filteredTasks = useMemo(() => {
+
+        return tasks.filter(task => {
+
+            const matchesSearch =
+                task.title
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) ||
+                (task.description || "")
+                    .toLowerCase()
+                    .includes(search.toLowerCase());
+
+            let matchesFilter = true;
+
+            if (filter === "pending") {
+                matchesFilter = !task.completed;
+            }
+
+            if (filter === "completed") {
+                matchesFilter = task.completed;
+            }
+
+            if (filter === "due") {
+
+                if (!task.deadline || task.completed) {
+                    matchesFilter = false;
+                } else {
+
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+
+                    const deadlineDate = new Date(
+                        `${task.deadline}T00:00:00`
+                    );
+
+                    matchesFilter =
+                        deadlineDate >= today &&
+                        deadlineDate <=
+                            new Date(
+                                today.getTime() +
+                                3 * 24 * 60 * 60 * 1000
+                            );
+                }
+            }
+
+            return matchesSearch && matchesFilter;
+
+        });
+
+    }, [tasks, search, filter]);
+
 
     return (
-        <div className="page dashboard">
+        <main className="main-content">
 
-            <h1>
-                My Tasks 📝
-            </h1>
+            {/* HEADER */}
 
-            <form
-                className="task-form"
-                onSubmit={addTask}
-            >
+            <header className="dashboard-header">
 
-                <input
-                    type="text"
-                    placeholder="Enter task title"
-                    value={title}
-                    onChange={(event) =>
-                        setTitle(event.target.value)
-                    }
-                />
+                <div>
 
-                <textarea
-                    placeholder="Enter task description"
-                    value={description}
-                    onChange={(event) =>
-                        setDescription(event.target.value)
-                    }
-                />
+                    <p className="eyebrow">
+                        MY CLASSROOM
+                    </p>
 
-                <button type="submit">
-                    + Add Task
-                </button>
+                    <h1>
+                        Good morning, Joan! 👋
+                    </h1>
 
-            </form>
+                    <p>
+                        Keep track of your school work
+                        and stay on top of your deadlines.
+                    </p>
+
+                </div>
+
+                <div className="profile-circle">
+                    JD
+                </div>
+
+            </header>
 
 
-            <div className="task-list">
+            {/* STATISTICS */}
 
-                {tasks.length === 0 ? (
+            <section className="stats-grid">
+
+                <div className="stat-card">
+
+                    <div className="stat-icon blue">
+                        📋
+                    </div>
+
+                    <div>
+                        <span>Total Tasks</span>
+                        <strong>{totalTasks}</strong>
+                    </div>
+
+                </div>
+
+
+                <div className="stat-card">
+
+                    <div className="stat-icon orange">
+                        ⏳
+                    </div>
+
+                    <div>
+                        <span>Pending</span>
+                        <strong>{pendingTasks}</strong>
+                    </div>
+
+                </div>
+
+
+                <div className="stat-card">
+
+                    <div className="stat-icon green">
+                        ✓
+                    </div>
+
+                    <div>
+                        <span>Completed</span>
+                        <strong>{completedTasks}</strong>
+                    </div>
+
+                </div>
+
+
+                <div className="stat-card">
+
+                    <div className="stat-icon red">
+                        📅
+                    </div>
+
+                    <div>
+                        <span>Due Soon</span>
+                        <strong>{dueSoonTasks}</strong>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            {/* ADD TASK */}
+
+            <section className="add-task-section">
+
+                <div className="section-heading">
+
+                    <div>
+
+                        <span className="section-label">
+                            CREATE
+                        </span>
+
+                        <h2>
+                            Add a New Task
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <form
+                    className="task-form"
+                    onSubmit={addTask}
+                >
+
+                    <div className="form-row">
+
+                        <div className="form-group">
+
+                            <label>
+                                Task Title
+                            </label>
+
+                            <input
+                                type="text"
+                                placeholder="e.g. Database Assignment"
+                                value={title}
+                                onChange={(event) =>
+                                    setTitle(event.target.value)
+                                }
+                            />
+
+                        </div>
+
+
+                        <div className="form-group">
+
+                            <label>
+                                Deadline
+                            </label>
+
+                            <input
+                                type="date"
+                                value={deadline}
+                                onChange={(event) =>
+                                    setDeadline(event.target.value)
+                                }
+                            />
+
+                        </div>
+
+                    </div>
+
+
+                    <div className="form-group">
+
+                        <label>
+                            Description
+                        </label>
+
+                        <textarea
+                            placeholder="Describe what you need to accomplish..."
+                            value={description}
+                            onChange={(event) =>
+                                setDescription(event.target.value)
+                            }
+                        />
+
+                    </div>
+
+
+                    <button
+                        className="add-button"
+                        type="submit"
+                    >
+                        + Add Task
+                    </button>
+
+                </form>
+
+            </section>
+
+
+            {/* TASKS */}
+
+            <section className="tasks-section">
+
+                <div className="tasks-header">
+
+                    <div>
+
+                        <span className="section-label">
+                            ASSIGNMENTS
+                        </span>
+
+                        <h2>
+                            My Tasks
+                        </h2>
+
+                    </div>
+
+
+                    <div className="task-controls">
+
+                        <div className="search-box">
+
+                            🔍
+
+                            <input
+                                type="text"
+                                placeholder="Search tasks..."
+                                value={search}
+                                onChange={(event) =>
+                                    setSearch(event.target.value)
+                                }
+                            />
+
+                        </div>
+
+
+                        <select
+                            value={filter}
+                            onChange={(event) =>
+                                setFilter(event.target.value)
+                            }
+                        >
+                            <option value="all">
+                                All Tasks
+                            </option>
+
+                            <option value="pending">
+                                Pending
+                            </option>
+
+                            <option value="completed">
+                                Completed
+                            </option>
+
+                            <option value="due">
+                                Due Soon
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                {loading ? (
 
                     <div className="empty">
-                        No tasks yet. Add your first task! 🎯
+                        Loading tasks...
+                    </div>
+
+                ) : filteredTasks.length === 0 ? (
+
+                    <div className="empty">
+
+                        <div className="empty-icon">
+                            📚
+                        </div>
+
+                        <h3>
+                            No tasks found
+                        </h3>
+
+                        <p>
+                            Add a task or change your search filter.
+                        </p>
+
                     </div>
 
                 ) : (
 
-                    tasks.map((task) => (
+                    <div className="task-list">
 
-                        <TaskCard
-                            key={task.id}
-                            task={task}
-                            onToggle={toggleTask}
-                            onDelete={deleteTask}
-                        />
+                        {filteredTasks.map(task => (
 
-                    ))
+                            <TaskCard
+                                key={task.id}
+                                task={task}
+                                onToggle={toggleTask}
+                                onDelete={deleteTask}
+                            />
+
+                        ))}
+
+                    </div>
 
                 )}
 
-            </div>
+            </section>
 
-        </div>
+        </main>
     );
 }
 

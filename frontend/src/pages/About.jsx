@@ -1,31 +1,85 @@
 function About() {
 
     return (
-        <div className="page">
+        <main className="main-content">
 
-            <h1>About the Application</h1>
+            <section className="about-card">
 
-            <p>
-                Student Task Manager is a full-stack
-                web application created for
-                Integrative Programming II.
-            </p>
+                <span className="section-label">
+                    ABOUT THE PROJECT
+                </span>
 
-            <br />
+                <h1>
+                    Student Task Manager
+                </h1>
 
-            <h2>Technologies Used</h2>
+                <p className="about-intro">
+                    Student Task Manager is a full-stack
+                    web application developed for
+                    Integrative Programming II.
+                </p>
 
-            <ul>
-                <li>React</li>
-                <li>Vite</li>
-                <li>React Router</li>
-                <li>Node.js</li>
-                <li>Express.js</li>
-                <li>PostgreSQL</li>
-            </ul>
 
-        </div>
+                <div className="about-grid">
+
+                    <div>
+
+                        <h2>
+                            🎯 Purpose
+                        </h2>
+
+                        <p>
+                            The application helps students
+                            organize school assignments,
+                            monitor deadlines, and track
+                            completed activities.
+                        </p>
+
+                    </div>
+
+
+                    <div>
+
+                        <h2>
+                            💻 Technologies
+                        </h2>
+
+                        <ul>
+                            <li>React</li>
+                            <li>Vite</li>
+                            <li>React Router</li>
+                            <li>Node.js</li>
+                            <li>Express.js</li>
+                            <li>PostgreSQL</li>
+                        </ul>
+
+                    </div>
+
+
+                    <div>
+
+                        <h2>
+                            ✨ Features
+                        </h2>
+
+                        <ul>
+                            <li>Add tasks</li>
+                            <li>Set deadlines</li>
+                            <li>Complete tasks</li>
+                            <li>Delete tasks</li>
+                            <li>Search tasks</li>
+                            <li>Filter tasks</li>
+                        </ul>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
     );
 }
 
 export default About;
+
